@@ -42,5 +42,7 @@ module Bag : Dataset.S
   let values m = Hashtbl.fold (fun _ v acc -> v::acc) m []
   let key_values = Hashtbl.find_all
   
+  let mapping_of_list pairs =
+    List.fold_left (fun acc (k,v) -> Hashtbl.add acc k v; acc) (Hashtbl.create 1024) pairs
 end
 

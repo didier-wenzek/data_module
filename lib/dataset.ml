@@ -25,4 +25,6 @@ module type S = sig
   val keys: ('a,'b) mapping -> 'a t
   val values: ('a,'b) mapping -> 'b t
   val key_values: ('a,'b) mapping -> 'a -> 'b t
+
+  val mapping_of_list: ('a*'b) list -> ('a,'b) mapping
 end

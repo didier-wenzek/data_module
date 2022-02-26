@@ -1,0 +1,4 @@
+(executable
+ (public_name data_module)
+ (name main)
+ (libraries data_module))

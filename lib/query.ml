@@ -36,6 +36,7 @@ module type S = sig
   val value: 'a -> ('a,'b) var
 
   val (!!): ('a,'c) var -> ('a,'b) relation -> ('b,'c) var -> 'c clause
+  val (!!@): ('a,'c) var -> 'a collection -> 'c clause
 
   type ('a,'b) selection
   val all: ('a,'a) selection

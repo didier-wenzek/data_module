@@ -46,16 +46,18 @@ module TestDB : DB = struct
   let authors = mapping_of_list $$ List.map (fun x -> Author.(x.uuid, x)) [
     Author.{ uuid = "A1"; name = "foo" };
     Author.{ uuid = "A2"; name = "bar" };
-    Author.{ uuid = "A3"; name = "xoxox" }
+    Author.{ uuid = "A3"; name = "xoxox" };
   ]
 
   let posts =  Post.(mapping_of_list $$ List.map (fun x -> (x.uuid, x)) [
     { uuid = "P1"; author_uuid = "A1"; date = 1; title = "foo musing"; tags = of_list ["PL"]; content = "foo foo foo" };
-    { uuid = "P2"; author_uuid = "A1"; date = 2; title = "foo blogging"; tags = of_list ["DB"]; content = "foo foo foo and more" }
+    { uuid = "P2"; author_uuid = "A1"; date = 2; title = "foo blogging"; tags = of_list ["DB"]; content = "foo foo foo and more" };
+    { uuid = "P3"; author_uuid = "A2"; date = 2; title = "bar blogging"; tags = of_list ["DB";"PL"]; content = "PL for DBs" };
   ])
 
   let comments = Comment.(mapping_of_list $$ List.map (fun x -> (x.uuid, x)) [
-    { uuid = "C1"; author_uuid = "A2"; date = 2; post_uuid = "P1"; content = "bar on foo";}
+    { uuid = "C1"; author_uuid = "A2"; date = 2; post_uuid = "P1"; content = "bar on foo";};
+    { uuid = "C2"; author_uuid = "A1"; date = 3; post_uuid = "P1"; content = "nice post!";};
   ])
 end
 

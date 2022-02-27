@@ -9,15 +9,15 @@ let iter_rows f =
 let () =
   Printf.printf "Posts of author foo\n";
   posts_of_author "foo" |> run |> iter_rows (
-    fun ((uuid,title),date) -> Printf.printf "%s: %s (%d)\n" uuid title date
+    fun ((uuid,title),date) -> Printf.printf "\t%s: %s (%d)\n" uuid title date
   );
 
   Printf.printf "Posts with tag DB\n";
   posts_of_tag "DB" |> run |> iter_rows (
-    fun ((title, _),_) -> Printf.printf "%s\n" title
+    fun ((title, author),date) -> Printf.printf "\t%s by %s (%d)\n" title author date
   );
 
   Printf.printf "Authors commenting their posts\n";
   names_of_authors_commenting_their_posts |> run |> iter_rows (
-    Printf.printf "%s\n"
+    Printf.printf "\t%s\n"
   )

@@ -3,6 +3,8 @@ open Util
 exception Unbounded
 exception Unboundable
 exception NoPlan
+exception NoInitPlan
+exception NoSubPlan
 
 module Var : sig
   type ('a,'context) var
@@ -250,6 +252,8 @@ module Make(Schema: Schema.S): Query.S
 
   let (!!) x rel y = Clause (x,rel,y)
 
+  let (!!@) x col = Clause (value (), Schema.rel_of_col col, x)
+
   (* Naive compilation:
      it peeks the first clause which can be applied,
      looping until there is no more clause.
@@ -286,7 +290,7 @@ module Make(Schema: Schema.S): Query.S
 
     let then_apply op plan =
       let rec loop discarded = function
-        | [] -> raise NoPlan             (* FIXME *)
+        | [] -> raise NoSubPlan          (* No clause can be used with this operation (filter, map, inv or gen) *)
         | clause :: others -> (
           match op plan clause with
           | None -> loop (clause::discarded) others
@@ -297,10 +301,10 @@ module Make(Schema: Schema.S): Query.S
 
     let then_apply_in_turn ops plan clauses =
       let rec loop = function
-        | [] -> raise NoPlan             (* FIXME *)
+        | [] -> raise NoPlan             (* The query is not generative *)
         | op :: others -> (
           try then_apply op plan clauses
-          with NoPlan -> loop others
+          with NoSubPlan -> loop others
         )
       in
       loop ops
@@ -326,7 +330,7 @@ module Make(Schema: Schema.S): Query.S
         | s -> s
       in
       let rec stack_of_clauses = function
-        | [] -> raise NoPlan             (* FIXME *) 
+        | [] -> raise NoInitPlan             (* The query contains no variable *) 
         | c :: cs ->
           match stack_of_clause c with
           | None -> stack_of_clauses cs
